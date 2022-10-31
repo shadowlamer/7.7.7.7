@@ -1,0 +1,5 @@
+bin/main.bin
+node_modules
+movies
+*.tap
+*.json
