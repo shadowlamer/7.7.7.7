@@ -8,6 +8,8 @@ straight into the heart.
 
 ![Screenshot](screenshot.png)
 
+Game made with [8bitworkshop](https://8bitworkshop.com/)
+
 Map made with [Tiled](https://github.com/mapeditor/tiled)
 
 Music made with [Furnace](https://github.com/tildearrow/furnace)
