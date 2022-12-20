@@ -106,9 +106,9 @@ function formatResult(cmd, data) {
     if (cmd === undefined) return;
     res += '0x' + cmd.toString(16).padStart(2,'0');
     if (data !== undefined) {
-        res += ',\t0x' + data.toString(16).padStart(2,'0');
+        res += ',\t0x' + data.toString(16).padStart(2,'0') + ',';
     } else {
-        res += '\t'
+        res += ',\t'
     }
     res += '\t// ' + notify(cmd, data);
     res += '\n';

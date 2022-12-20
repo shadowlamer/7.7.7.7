@@ -1,0 +1,28 @@
+{
+  "name": "vgm2hex",
+  "version": "1.0.0",
+  "description": "Extracts AY-3-8910 commands from VGM.",
+  "main": "bin/main.js",
+  "bin": {
+    "vgm2hex": "bin/main.js"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shadowlamer/7.7.7.7.git"
+  },
+  "author": "sl@anhot.ru",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shadowlamer/7.7.7.7/issues"
+  },
+  "homepage": "https://github.com/shadowlamer/7.7.7.7#readme",
+  "dependencies": {
+    "vgm-parser": "^0.9.5"
+  }
+}
