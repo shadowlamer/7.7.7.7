@@ -23,6 +23,9 @@
 
 #define POKES (INTERRUPT_TABLE_START + INTERRUPT_TABLE_SIZE)
 
+#define MIX_CHAN_MASK_MUSIC 0x1b
+#define MIX_CHAN_MASK_EFFECTS 0x09
+
 #define SIZE_OF_INT 2
 
 #define DASHBOARD_HEIGHT 32
@@ -257,6 +260,7 @@ static ai_struct_t *p_current_ai;
 static unsigned char *p_music_start = NULL;
 static unsigned char *p_music = NULL;
 static unsigned char *p_effect = NULL;
+static unsigned char mixer = 0;
 static unsigned char music_timer = 0;
 static unsigned char effect_timer = 0;
 static unsigned char second_timer = 0;
@@ -1576,7 +1580,13 @@ void nmi_isr() {
       while (*p_music < 16) {
         ay_addr_port = *p_music;
         p_music++;
-        ay_data_port = *p_music;
+        if (*p_music == 0x07) { // mixer
+          mixer | (*p_music & MIX_CHAN_MASK_MUSIC);  // set masked bits
+          mixer & (*p_music | ~MIX_CHAN_MASK_MUSIC); // reset masked bits
+          ay_data_port = mixer;
+        } else {
+          ay_data_port = *p_music;
+        }
         p_music++;
       }
       if (*p_music == 0xff) {
