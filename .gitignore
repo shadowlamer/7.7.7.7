@@ -4,3 +4,5 @@ movies
 .idea
 *.tap
 
+/package.json
+/package-lock.json
