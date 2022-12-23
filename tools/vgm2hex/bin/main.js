@@ -14,6 +14,9 @@ const {
 
 const guardPrefix = options.get('prefix')
 const outfile = options.get('outfile')
+const channelAllowedA = options.get('channels').includes('A');
+const channelAllowedB = options.get('channels').includes('B');
+const channelAllowedC = options.get('channels').includes('C');
 
 const registers = {
     0x00: 'Channel A: tone freq  low bits',
@@ -35,22 +38,22 @@ const registers = {
 }
 
 const envForm = {
-    0x00: '\____',
-    0x01: '\____',
-    0x02: '\____',
-    0x03: '\____',
-    0x04: '/____',
-    0x05: '/____',
-    0x06: '/____',
-    0x07: '/____',
-    0x08: '\\\\\\\\\\',
-    0x09: '\____',
-    0x0a: '\\/\\/\\',
-    0x0b: '\\````',
-    0x0c: '/////',
-    0x0d: '/`````',
-    0x0e: '/\\/\\/',
-    0x0f: '/____',
+    0x00: 'single decay then off',
+    0x01: 'single decay then off',
+    0x02: 'single decay then off',
+    0x03: 'single decay then off',
+    0x04: 'single attack then off',
+    0x05: 'single attack then off',
+    0x06: 'single attack then off',
+    0x07: 'single attack then off',
+    0x08: 'repeated decay',
+    0x09: 'single decay then off',
+    0x0a: 'repeated decay-attack',
+    0x0b: 'single decay then hold',
+    0x0c: 'repeated attack',
+    0x0d: 'single attack then hold',
+    0x0e: 'repeated attack-decay',
+    0x0f: 'single attack then off',
 };
 
 if (options.get('help') || 0 === options.getInput().length) {
@@ -101,9 +104,33 @@ function notify(cmd, data) {
     return res;
 }
 
+function isCmdAllowedForChannel(cmd) {
+    switch (cmd) {
+        case 0x00: // Channel A: tone freq  low bits
+        case 0x01: // Channel A: tone freq. high bits
+        case 0x08: // Channel A: tone amplitude
+            return channelAllowedA;
+
+        case 0x02: // Channel B: tone freq. low bits
+        case 0x03: // Channel B: tone freq. high bits
+        case 0x09: // Channel B: tone amplitude
+            return channelAllowedB;
+
+        case 0x04: // Channel C: tone freq. low bits
+        case 0x05: // Channel C: tone freq. high bits
+        case 0x0a: // Channel C: tone amplitude
+            return channelAllowedC;
+
+        default:
+            return true;
+    }
+}
+
 function formatResult(cmd, data) {
+    if (cmd === undefined) return '';
+    if (!isCmdAllowedForChannel(cmd)) return '';
+
     let res = '';
-    if (cmd === undefined) return;
     res += '0x' + cmd.toString(16).padStart(2,'0');
     if (data !== undefined) {
         res += ',\t0x' + data.toString(16).padStart(2,'0') + ',';

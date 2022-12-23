@@ -14,6 +14,12 @@ const options = [
         default: '__MUSIC'
     },
     {
+        description: 'allowed channels',
+        long: 'channels',
+        short: 'c',
+        default: 'ABC'
+    },
+    {
         description: 'print usage information',
         long: 'help',
         short: '?',
