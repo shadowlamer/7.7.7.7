@@ -10,6 +10,7 @@
 #include "dashboard.h"
 #include "font1.h"
 #include "music.h"
+#include "effects.h"
 #include "messages.h"
 
 #define EMBEDDED_FONT_START 0x3c00
@@ -23,7 +24,7 @@
 
 #define POKES (INTERRUPT_TABLE_START + INTERRUPT_TABLE_SIZE)
 
-#define MIX_CHAN_MASK_MUSIC 0x1b
+#define MIX_CHAN_MASK_MUSIC 0x36
 #define MIX_CHAN_MASK_EFFECTS 0x09
 
 #define SIZE_OF_INT 2
@@ -412,6 +413,8 @@ void init(){
   if (!BULLET_SPEED)   BULLET_SPEED   = 6;
   if (!HERO_SPEED)     HERO_SPEED     = 4;
   if (!RESPAWN_TIME)   RESPAWN_TIME   = 150;
+  
+  mixer = 0xff;
 
   success_flag = 0;
   
@@ -503,10 +506,13 @@ void intro(){
       notes = notes_ru;
       break;
   }
-
+  play_effect(eff_jump);
   menu(16, 8, messages + MSG_INTRO1);
+  play_effect(eff_jump);
   menu(16, 8, messages + MSG_INTRO2);
+  play_effect(eff_jump);
   menu(16, 8, messages + MSG_CONTROLS);
+  play_effect(eff_jump);
   
   for (unsigned char i = 0; i < STEPS_PER_LINE * VISIBLE_MAP_ROWS; i++) {
       add_stars(STARS_DENSE);
@@ -729,6 +735,7 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
         } else { // jump
           if (collision.touch.bottom) {
             p_ai->dy = JUMP_FORCE;
+            play_effect(eff_jump);
           }
         }
       } else if ((key & KEY_DOWN)  && collision.stand_at == ENV_LADDER) { // climb ladder down
@@ -829,7 +836,8 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
           case DIR_RIGHT:
             if (!safe_move(p_sprite, p_ai->dir, BULLET_SPEED)) {
               p_ai->dir = DIR_UP;
-              p_ai->pose = 0;		      
+              p_ai->pose = 0;
+              play_effect(eff_crash);
             }
           break;  
           case DIR_UP:
@@ -1579,12 +1587,13 @@ void nmi_isr() {
     if (music_timer == 0) {
       while (*p_music < 16) {
         ay_addr_port = *p_music;
-        p_music++;
         if (*p_music == 0x07) { // mixer
-          mixer | (*p_music & MIX_CHAN_MASK_MUSIC);  // set masked bits
-          mixer & (*p_music | ~MIX_CHAN_MASK_MUSIC); // reset masked bits
+          p_music++;
+          mixer |= (*p_music & MIX_CHAN_MASK_MUSIC);  // set masked bits
+          mixer &= (*p_music ^ ~MIX_CHAN_MASK_MUSIC); // reset masked bits
           ay_data_port = mixer;
         } else {
+          p_music++;
           ay_data_port = *p_music;
         }
         p_music++;
@@ -1598,13 +1607,34 @@ void nmi_isr() {
     } else {
       music_timer--;
     }
-  } else {
-    ay_addr_port = 0x09;
-    ay_data_port = 0;
-    ay_addr_port = 0x0a;
-    ay_data_port = 0;
   }
 
+  if (p_effect != NULL) {
+    if (effect_timer == 0) {
+      while (*p_effect < 16) {
+        ay_addr_port = *p_effect;
+        if (*p_effect == 0x07) { // mixer
+          p_effect++;
+          mixer |= (*p_effect & MIX_CHAN_MASK_EFFECTS);  // set masked bits
+          mixer &= (*p_effect ^ ~MIX_CHAN_MASK_EFFECTS); // reset masked bits
+          ay_data_port = mixer;
+        } else {
+          p_effect++;
+          ay_data_port = *p_effect;
+        }
+        p_effect++;
+      }
+      if (*p_effect == 0xff) {
+        p_effect = NULL;
+     } else {
+        effect_timer += *p_effect & 0x7f;
+        p_effect++;
+      }
+    } else {
+      effect_timer--;
+    }
+  }
+  
   if (imm_timer != 0) imm_timer--;
   if (respawn_timer != 0) respawn_timer--;
   if (second_timer != 0) {
@@ -1634,4 +1664,9 @@ void play_music(char *p) {
   p_music_start = p;
   p_music = p;
   music_timer = 0;
+}
+
+void play_effect(char *p) {
+  p_effect = p;
+  effect_timer = 0;
 }

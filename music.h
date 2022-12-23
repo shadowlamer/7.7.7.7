@@ -2,7 +2,6 @@
 #define __MUSIC_H 1
 static const unsigned char music_death[] = {
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0xbc,	// Channel B: tone freq. low bits
@@ -646,7 +645,6 @@ static const unsigned char music_death[] = {
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0xb6,		// Pause 350ms
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0xbc,	// Channel B: tone freq. low bits
@@ -662,7 +660,6 @@ static const unsigned char music_death[] = {
 
 static const unsigned char music_intro[] = {
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0xbc,	// Channel B: tone freq. low bits
@@ -1070,7 +1067,6 @@ static const unsigned char music_intro[] = {
 0x05,	0x02,	// Channel C: tone freq. high bits
 0xaf,		// Pause 800ms
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0xbc,	// Channel B: tone freq. low bits
@@ -1086,7 +1082,6 @@ static const unsigned char music_intro[] = {
 
 static const unsigned char music_quiz[] = {
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0xb0,	// Channel B: tone freq. low bits
@@ -1750,7 +1745,6 @@ static const unsigned char music_quiz[] = {
 0x0a,	0x08,	// Channel C: tone amplitude
 0x80,		// Pause 50ms
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0xb0,	// Channel B: tone freq. low bits
@@ -1765,7 +1759,6 @@ static const unsigned char music_quiz[] = {
 
 static const unsigned char music_walk[] = {
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0x32,	// Channel B: tone freq. low bits
@@ -2899,7 +2892,6 @@ static const unsigned char music_walk[] = {
 0x09,	0x05,	// Channel B: tone amplitude
 0x80,		// Pause 50ms
 0x07,	0x3f,	// Mixer:  toneA off, toneB off, toneC off, noiseA off, noiseB off, noiseC off
-0x08,	0x00,	// Channel A: tone amplitude (muted)
 0x09,	0x00,	// Channel B: tone amplitude (muted)
 0x0a,	0x00,	// Channel C: tone amplitude (muted)
 0x02,	0x32,	// Channel B: tone freq. low bits
@@ -2913,4 +2905,3 @@ static const unsigned char music_walk[] = {
 };
 
 #endif // __MUSIC_H 1
-
