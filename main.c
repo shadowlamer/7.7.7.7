@@ -24,9 +24,6 @@
 
 #define POKES (INTERRUPT_TABLE_START + INTERRUPT_TABLE_SIZE)
 
-#define MIX_CHAN_MASK_MUSIC 0x36
-#define MIX_CHAN_MASK_EFFECTS 0x09
-
 #define SIZE_OF_INT 2
 
 #define DASHBOARD_HEIGHT 32
@@ -260,10 +257,10 @@ static sprite_struct_t *p_current_sprite;
 static ai_struct_t *p_current_ai;
 static unsigned char *p_music_start = NULL;
 static unsigned char *p_music = NULL;
-static unsigned char *p_effect = NULL;
-static unsigned char mixer = 0;
 static unsigned char music_timer = 0;
-static unsigned char effect_timer = 0;
+static unsigned char *p_music_store = NULL;
+static unsigned char noise_store = 0;
+static unsigned char mixer_store = 0;
 static unsigned char second_timer = 0;
 static unsigned int global_timer = 0;
 
@@ -414,8 +411,6 @@ void init(){
   if (!HERO_SPEED)     HERO_SPEED     = 4;
   if (!RESPAWN_TIME)   RESPAWN_TIME   = 150;
   
-  mixer = 0xff;
-
   success_flag = 0;
   
   imm_timer = IMMORTALITY_TIME;
@@ -506,13 +501,13 @@ void intro(){
       notes = notes_ru;
       break;
   }
-  play_effect(eff_jump);
+  play_effect(effect_jump);
   menu(16, 8, messages + MSG_INTRO1);
-  play_effect(eff_jump);
+  play_effect(effect_jump);
   menu(16, 8, messages + MSG_INTRO2);
-  play_effect(eff_jump);
+  play_effect(effect_jump);
   menu(16, 8, messages + MSG_CONTROLS);
-  play_effect(eff_jump);
+  play_effect(effect_jump);
   
   for (unsigned char i = 0; i < STEPS_PER_LINE * VISIBLE_MAP_ROWS; i++) {
       add_stars(STARS_DENSE);
@@ -735,7 +730,7 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
         } else { // jump
           if (collision.touch.bottom) {
             p_ai->dy = JUMP_FORCE;
-            play_effect(eff_jump);
+            play_effect(effect_jump);
           }
         }
       } else if ((key & KEY_DOWN)  && collision.stand_at == ENV_LADDER) { // climb ladder down
@@ -837,7 +832,7 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
             if (!safe_move(p_sprite, p_ai->dir, BULLET_SPEED)) {
               p_ai->dir = DIR_UP;
               p_ai->pose = 0;
-              play_effect(eff_crash);
+              play_effect(effect_crash);
             }
           break;  
           case DIR_UP:
@@ -1586,52 +1581,32 @@ void nmi_isr() {
   if (p_music != NULL) {
     if (music_timer == 0) {
       while (*p_music < 16) {
-        ay_addr_port = *p_music;
-        if (*p_music == 0x07) { // mixer
-          p_music++;
-          mixer |= (*p_music & MIX_CHAN_MASK_MUSIC);  // set masked bits
-          mixer &= (*p_music ^ ~MIX_CHAN_MASK_MUSIC); // reset masked bits
-          ay_data_port = mixer;
-        } else {
-          p_music++;
-          ay_data_port = *p_music;
+        unsigned char p = *p_music++;
+        unsigned char d = *p_music++;
+        ay_addr_port = p;
+        ay_data_port = d;
+        if (!p_music_store) {
+          if (p == 0x06) noise_store = d; // save mixer settings
+          if (p == 0x07) mixer_store = d; // save noise amplitude
         }
-        p_music++;
       }
       if (*p_music == 0xff) {
-        p_music = p_music_start;
+        if (p_music_store) { // restore music after effect
+          p_music = p_music_store; 
+          p_music_store = NULL;
+          ay_addr_port = 0x06; // restore noise frequency
+          ay_data_port = noise_store;      
+          ay_addr_port = 0x07; // restore mixer settings
+          ay_data_port = mixer_store;      
+        } else { // start since beginning
+          p_music = p_music_start;
+        }
       } else {
         music_timer += *p_music & 0x7f;
         p_music++;
       }
     } else {
       music_timer--;
-    }
-  }
-
-  if (p_effect != NULL) {
-    if (effect_timer == 0) {
-      while (*p_effect < 16) {
-        ay_addr_port = *p_effect;
-        if (*p_effect == 0x07) { // mixer
-          p_effect++;
-          mixer |= (*p_effect & MIX_CHAN_MASK_EFFECTS);  // set masked bits
-          mixer &= (*p_effect ^ ~MIX_CHAN_MASK_EFFECTS); // reset masked bits
-          ay_data_port = mixer;
-        } else {
-          p_effect++;
-          ay_data_port = *p_effect;
-        }
-        p_effect++;
-      }
-      if (*p_effect == 0xff) {
-        p_effect = NULL;
-     } else {
-        effect_timer += *p_effect & 0x7f;
-        p_effect++;
-      }
-    } else {
-      effect_timer--;
     }
   }
   
@@ -1667,6 +1642,7 @@ void play_music(char *p) {
 }
 
 void play_effect(char *p) {
-  p_effect = p;
-  effect_timer = 0;
+  p_music_store = p_music;
+  p_music = p;
+  music_timer = 0;
 }
