@@ -857,6 +857,7 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
     case CHAR_FUNGUS:
       if (touch(p_sprite, HERO)) waste_life();
       if (touch(p_sprite, BULLET)) {
+        play_effect(effect_crash);
         disappear(p_sprite, p_ai);
         BULLET_AI->pose = 0;		      
         BULLET_AI->dir = DIR_UP;
