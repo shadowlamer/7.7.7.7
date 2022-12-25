@@ -399,7 +399,7 @@ int main() {
 }
 
 void init(){
-  if (!SHOW_INTRO)     SHOW_INTRO     = 1;
+//  if (!SHOW_INTRO)     SHOW_INTRO     = 1;
   if (!JUMP_FORCE)     JUMP_FORCE     = 7;
   if (!FALLER_SENSE)   FALLER_SENSE   = 24;
   if (!HERO_LIVES)     HERO_LIVES     = 5;
