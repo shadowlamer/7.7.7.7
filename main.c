@@ -897,6 +897,8 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
       p_current_sprite->y == DASHBOARD_HEIGHT;
     } else {
       disappear(p_current_sprite, p_current_ai);
+      draw_dashboard_frame(); // fix dasboard artefacts
+      draw_stats();
     }
     // if hero escapes from swinx suddenly
     if (p_ai->char_type == CHAR_SWINX) chat_stop();
