@@ -687,8 +687,15 @@ void update_map() {
           memset(&(map_lines[MAX_MAP_ROW][0]), 0, LINE_WIDTH);
         break;  
         case STG_DRAW_LINE:  
-          draw_bkg_line(22, background2_bin[(map_pos - MAP_MAP_SIZE) * 2]);
-          draw_bkg_line(23, background2_bin[(map_pos - MAP_MAP_SIZE) * 2 + 1]);
+          if (success_flag) {
+            for (unsigned char j = 0; j < LINE_HEIGHT; j++) {
+    	      memset(screen_line_addrs[SCR_HEIGHT + j - LINE_HEIGHT], 0, SCR_WIDTH);
+            }
+            add_stars(STARS_DENSE);
+          } else {
+            draw_bkg_line(22, background2_bin[(map_pos - MAP_MAP_SIZE) * 2]);
+            draw_bkg_line(23, background2_bin[(map_pos - MAP_MAP_SIZE) * 2 + 1]);
+          }
         break;  
       }
     }
