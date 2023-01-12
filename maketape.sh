@@ -7,7 +7,7 @@ CODE="${PWD}/bin/main.bin"
 INTRO="${PWD}/assets/intro.scr"
 SKIP=536
 
-read -r END REST < <(hexdump -C ${ROM} | tail -n 2 | head -n 1)
+END=$(grep -oba $'\xde\xad\xbe\xef' ${ROM} | cut -d: -f1)
 dd if=${ROM} of=${CODE} bs=1 skip=${SKIP} count=$((0x${END}-${SKIP}))
 
 zmakebas -i 1 -a 10 -l -o ${TAPE} -n ${PROJECT} loader.bas
