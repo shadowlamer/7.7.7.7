@@ -31,6 +31,7 @@ const keyCodes = {
 
 const keyboard = new Keyboard({
     onKeyPress: button => onKeyPress(button),
+    onKeyReleased: button => onKeyRelease(button),
     layoutName: 'default',
     layout: {
         'default': [
@@ -55,7 +56,7 @@ const speccy = JSSpeccy(speccyElement[0], {
     autoLoadTapes: true,
     autoStart: true,
     machine: 128,
-    zoom: 2,
+    zoom: calcScaleFactor(),
     openUrl: 'tap/7777.tap',
 });
 
@@ -65,11 +66,12 @@ function onKeyPress(button) {
     document.dispatchEvent(new KeyboardEvent('keydown', {
         keyCode: keyCodes[button]
     }));
-    setTimeout(() => {
-        document.dispatchEvent(new KeyboardEvent('keyup', {
-            keyCode: keyCodes[button]
-        }));
-    }, 100);
+}
+
+function onKeyRelease(button) {
+    document.dispatchEvent(new KeyboardEvent('keyup', {
+        keyCode: keyCodes[button]
+    }));
 }
 
 function calcScaleFactor() {
