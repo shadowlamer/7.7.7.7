@@ -2,7 +2,4 @@ bin/main.bin
 node_modules
 movies
 .idea
-*.tap
-
-/package.json
-/package-lock.json
+/*.tap

@@ -1,0 +1,17 @@
+body {
+    background: black;
+}
+
+.simple-keyboard {
+    max-width: 850px;
+    margin: auto;
+}
+
+.speccy div {
+    margin: auto;
+}
+
+.container {
+    padding-top: 24px;
+    background: black;
+}
