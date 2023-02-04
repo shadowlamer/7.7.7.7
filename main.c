@@ -883,7 +883,7 @@ void ai(sprite_struct_t *p_sprite, ai_struct_t *p_ai) {
       }
       break;
     case CHAR_WORTOR: // throw back thru map
-      if (touch(p_sprite, HERO)) {
+      if (touch(p_sprite, HERO) && HERO_LIVES > 0) {
         print_message(MSG_NOTE_WORTOR_TOUCH, notes);
         step_counter = (step_counter > LINE_HEIGHT) ? step_counter - LINE_HEIGHT : 0; 
         for (unsigned char block = 0; block < LINE_WIDTH; block++) {  
