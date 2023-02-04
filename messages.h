@@ -174,8 +174,8 @@ static const char const *notes_en[] = {
   "Press [UP] to  ",
   "use teleport.  ",
 // wortor touch
-  "Strange        ",
-  "feeling...     ",
+  "I thinh I have ",
+  "dejavu...",
 // heart of darkness
   "The Heart of   ",
   "Darkness.      ",
@@ -192,8 +192,8 @@ static const char const *notes_ru[] = {
   "\xCD\xE0\xE6\xEC\xE8 [\xE2\xE2\xE5\xF0\xF5]  ",
   "\xE4\xEB\xFF \xEF\xE5\xF0\xE5\xED\xEE\xF1\xE0   ",
 // wortor touch
-  "\xD1\xF2\xF0\xE0\xED\xED\xEE\xE5       ",
-  "\xEE\xF9\xF3\xF9\xE5\xED\xE8\xE5...    ",
+  "\xC3\xE4\xE5-\xF2\xEE \xFF \xFD\xF2\xEE   ",
+  "\xF3\xE6\xE5 \xE2\xE8\xE4\xE5\xEB...   ",
 // heart of darkness
   "\xD1\xE5\xF0\xE4\xF6\xE5 \xF2\xFC\xEC\xFB    ",
   "               ",
