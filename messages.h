@@ -165,6 +165,7 @@ static const char const *chat_ru[] = {
 #define MSG_NOTE_WORTOR_TOUCH 4
 #define MSG_NOTE_HEART_SETUP 6
 #define MSG_NOTE_LATE 8
+#define MSG_NOTE_GAME_OVER 10
 
 static const char const *notes_en[] = {
 // hero
@@ -182,6 +183,9 @@ static const char const *notes_en[] = {
 // late
   "Your are late. ",
   "               ",
+// game over
+  "It is all over.",
+  "Abyss awaits.  ",
 };
 
 static const char const *notes_ru[] = {
@@ -200,6 +204,9 @@ static const char const *notes_ru[] = {
 // late
   "\xD2\xFB\x20\xEE\xEF\xEE\xE7\xE4\xE0\xEB.",
   "               ",
+// game over
+  "\xC2\xF1\xE5 \xEA\xEE\xED\xF7\xE5\xED\xEE.   ",
+  "\xC1\xE5\xE7\xE4\xED\xE0 \xE6\xE4\xE5\xF2.   ",
 };
 
 

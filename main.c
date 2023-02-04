@@ -940,6 +940,7 @@ void waste_life() {
     HERO_LIVES--;
     if (HERO_LIVES == 0)  {
       step_counter = (MAP_MAP_SIZE * STEPS_PER_LINE); // step into the abyss
+      print_message(MSG_NOTE_GAME_OVER, notes);
       play_music(music_death);
     }
     draw_stats();
@@ -1129,6 +1130,9 @@ void draw_stats() {
   }
   for (char i = 0; i < HERO_LIVES_MAX; i++) {
     print((i < HERO_LIVES)?C_HEART:C_HEART_BROKEN, i + LIVES_POS_X, LIVES_POS_Y);
+  }
+  if (HERO_LIVES == 0) {
+    print_message(MSG_NOTE_GAME_OVER, notes);
   }
 }
 
